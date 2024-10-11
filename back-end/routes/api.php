@@ -21,5 +21,6 @@ Route::post('updateVerification/{email}', [UserController::class, 'verification_
 Route::put('resendCode/{email}', [UserController::class, 'resend']);
 Route::post('loginPage', [UserController::class, 'login']);
 Route::post('forgot_password/{email}', [UserController::class, 'forgot_password']);
+Route::put('updatePassword/{email}', [UserController::class, 'newPassword']);
 
 

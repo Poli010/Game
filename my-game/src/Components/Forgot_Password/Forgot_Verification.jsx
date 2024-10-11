@@ -2,7 +2,6 @@ import video from './../../assets/Loop Background .mp4';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 import success_cat from './../../assets/success_create.gif';
 
 function Forgot_Verification(){

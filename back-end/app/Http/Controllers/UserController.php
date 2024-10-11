@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\Update;
 use App\Http\Requests\Going;
+use App\Http\Requests\changePassword;
 use App\Models\Accounts;
 use App\Mail\VerificationCodeMail; 
 use App\Mail\ResendCodeMail; 
@@ -106,6 +107,9 @@ class UserController extends Controller
             else if(!Hash::check($password, $email->password)){
                 return response()->json(['message' => 'wrong password'], 200);
             }
+            else if($email->verification_code !== $email->verification_complete){
+                return response()->json(['message' => 'your account is not verified'], 200);
+            }
             else if($email->account_type === "end_user"){
                 return response()->json(['message' => 'going to end user page'], 200);
             }
@@ -120,6 +124,7 @@ class UserController extends Controller
             ], 500);
         }
     }
+
     //FORGOT PASSWORD FUNCTION
     public function forgot_password($email){
         $accounts = Accounts::where('email', $email)->first();
@@ -133,6 +138,14 @@ class UserController extends Controller
             $accounts->save();
             return response()->json(['message' => 'verification code sent successfully'], 200);
         }
+    }
 
+    //CREATE NEW PASSWORD
+    public function newPassword(changePassword $change, $email){
+        $password = bcrypt($change->password);
+        $accounts = Accounts::where('email', $email)->first();
+        $accounts->password = $password;
+        $accounts->save();
+        return response()->json(['message' => 'Password updated'], 200);
     }
 }

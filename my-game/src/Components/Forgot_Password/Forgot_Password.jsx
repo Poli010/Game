@@ -40,7 +40,7 @@ function Forgot_Password(){
             <div className="content fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] bg-[#00FFB2] h-[250px] w-[300px] rounded-[10px] md:w-[400px] lg:h-[250px] lg:w-[450px] overflow-hidden">
                 <form className="info flex flex-col justify-center items-center h-[200px] w-[300px] md:w-[400px] lg:w-[450px] lg:h-[200px]" onSubmit={submit}>
                     <p className='mt-8 font-bold lg:text-lg'>Please enter your email😒</p>
-                    <input type="text" className='border-black border-[1px] rounded-[10px] w-[270px] mt-5 outline-none' value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                    <input type="text" className='border-black border-[1px] rounded-[5px] w-[270px] mt-5 h-8 outline-none' value={email} onChange={(e) => setEmail(e.target.value)} required/>
                     {errorEmail && <p className="text-red-700 text-sm mt-2 w-[300px] md:w-[400px] text-center">The email you entered is not registered to our system!</p>}
                     <button className={button}>Submit</button>
                     <p className={sending}>Sending...</p>

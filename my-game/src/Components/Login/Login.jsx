@@ -8,6 +8,8 @@ function Login(){
     const [email_username, setEmail_username] = useState("");
     const [password, setPasword] = useState("");
     const [errorEmail, setError_Email] = useState("");
+    const [alertVerified, setAlertVerified] = useState("");
+    const [wrongEmail, setWrongEmail] = useState("text-red-700 text-sm w-[250px]")
     const navigate = useNavigate();
 
     function login(e){
@@ -19,6 +21,10 @@ function Login(){
         }).then(response => {
             if(response.data.message === "wrong password"){
                 setError_Email("Wrong email or password");
+            }
+            else if(response.data.message === "your account is not verified"){
+                setAlertVerified("your account is not verified");
+                setWrongEmail("hidden");
             }
             else if(response.data.message === "going to end user page"){
                 navigate('/Choose_Game');
@@ -45,7 +51,8 @@ function Login(){
                             <label htmlFor="">Password:</label>
                             <input type="password" className='ml-13 border-black outline-none border-[1px] rounded-[5px]' value={password} onChange={(e) => setPasword(e.target.value)} required/>
                         </div>
-                        {errorEmail && <p className="text-red-700 text-sm w-[250px]">Wrong email/username or password!</p>}
+                        {errorEmail && <p className={wrongEmail}>Wrong email/username or password!</p>}
+                        {alertVerified && <p className="text-red-700 text-sm w-[250px]">The account you enter is not verified, to verify your account please go to <span className='font-bold'>"forgot password?"</span></p>}
                         <div className='flex flex-col justify-center items-center'>
                             <Link to="/Forgot_Password">
                                 <a href="#" className='ml-32 text-sm underline mt-2 hover:text-blue-600 transition duration-[0.5s]'>Forgot Password?</a>
