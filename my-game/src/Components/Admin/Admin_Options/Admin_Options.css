@@ -1,0 +1,13 @@
+.active-links{
+    background: #787566;
+    width: 240px;
+    height: 40px;
+}
+
+@media (max-width:768px){
+    .active-links{
+        background: #787566;
+        width: 175px;
+        height: 40px;
+    }
+}

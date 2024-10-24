@@ -148,4 +148,10 @@ class UserController extends Controller
         $accounts->save();
         return response()->json(['message' => 'Password updated'], 200);
     }
+
+    //FETCH ALL DATA
+    public function fetchAll(){
+        $accounts = Accounts::all();
+        return response()->json(['result' => $accounts], 200);
+    }
 }
