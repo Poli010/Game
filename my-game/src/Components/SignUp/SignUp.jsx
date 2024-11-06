@@ -114,7 +114,6 @@ function SignUp(){
                             <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className='ml-13 w-[250px] border-black outline-none border-[1px] rounded-[5px]' required autoComplete='off'/>
                             {password != confirmPassword && <p className="text-red-700">Password does not match!</p>}
                         </div>
-                        
                         <div className="button flex flex-col items-center">
                             <button className='text-white bg-[#EE5454] hover:bg-[#a23a3a] transition duration-[0.5s] w-28 rounded-[10px] h-7 mt-2'>Sign Up</button>
                         </div>

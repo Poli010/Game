@@ -1,21 +1,22 @@
 
 
-.add_accounts{
+.add_questions{
     position: fixed;
     background: white;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%)scale(0.1);
-    height: 500px;
+    height: 400px;
     width: 400px;
     border: 1px solid black;
     border-radius: 10px;
     box-shadow: 10px 10px 15px black;
     visibility: hidden;
     transition: 0.5s;
+    overflow: hidden;
 }
 
-.add_accounts-open{
+.add_questions-open{
     transform: translate(-50%, -50%)scale(1);
     visibility: visible;
 }

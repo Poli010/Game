@@ -22,6 +22,9 @@ function Login(){
             if(response.data.message === "wrong password"){
                 setError_Email("Wrong email or password");
             }
+            else if(response.data.message === "wrong email/username address"){
+                setError_Email("Wrong email or password");
+            }
             else if(response.data.message === "your account is not verified"){
                 setAlertVerified("your account is not verified");
                 setWrongEmail("hidden");
