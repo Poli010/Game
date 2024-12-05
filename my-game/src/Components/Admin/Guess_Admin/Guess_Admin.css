@@ -1,0 +1,95 @@
+
+
+.guess_question{
+    position: fixed;
+    background: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)scale(0.1);
+    height: 290px;
+    width: 400px;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 10px 10px 15px black;
+    visibility: hidden;
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.guess_question-open{
+    transform: translate(-50%, -50%)scale(1);
+    visibility: visible;
+}
+
+.editGuess{
+    position: fixed;
+    background: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)scale(0.1);
+    height: 400px;
+    width: 400px;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 10px 10px 15px black;
+    visibility: hidden;
+    transition: 0.5s;
+}
+
+.editGuess-open{
+    transform: translate(-50%, -50%)scale(1);
+    visibility: visible;
+}
+
+.delete{
+    position: fixed;
+    background: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)scale(0.1);
+    height: 14rem;
+    width: 400px;
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: 10px 10px 15px black;
+    visibility: hidden;
+    transition: 0.5s;
+}
+
+.delete-open{
+    transform: translate(-50%, -50%)scale(1);
+    visibility: visible;
+}
+
+.uploadBtn{
+    border: 1px solid black;
+    width: 180px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: color 0.5s;
+    position: relative;
+}
+
+.uploadBtn:hover{
+    color: #fff;
+}
+
+.uploadBtn::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: blue;
+    z-index: -1;
+    transition: transform 0.5s;
+    transform-origin: 0 0;
+    transition-timing-function: cubic-bezier(0.5,1.5,0.5,0.7);
+    transform: scaleX(0);
+}
+
+.uploadBtn:hover::before{
+    transform: scaleX(1);
+}

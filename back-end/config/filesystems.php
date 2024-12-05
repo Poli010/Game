@@ -57,6 +57,12 @@ return [
             'throw' => false,
         ],
 
+        'pictures' => [
+            'driver' => 'local',
+            'root' => public_path('images'), // Use the correct path to your folder (relative to public)
+            'url' => env('APP_URL') . '/images', // Optionally set the URL (adjust if needed)
+            'visibility' => 'public', // If you want it publicly accessible
+        ],
     ],
 
     /*

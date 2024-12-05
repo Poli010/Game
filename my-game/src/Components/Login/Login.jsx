@@ -11,9 +11,15 @@ function Login(){
     const [alertVerified, setAlertVerified] = useState("");
     const [wrongEmail, setWrongEmail] = useState("text-red-700 text-sm w-[250px]")
     const navigate = useNavigate();
+    const [loginAnimation, setLoginAnimation] = useState("hidden");
+    const [loginBtn, setLoginBtn] = useState("text-white bg-[#EE5454] hover:bg-[#a23a3a] transition duration-[0.5s] w-28 rounded-[10px] h-7 mt-2")
 
+ 
+    
     function login(e){
         e.preventDefault();
+        setLoginAnimation("text-center text-lg font-medium inline-block animate-[fade_1.5s_ease-in-out_infinite] delay-[0]");
+        setLoginBtn("hidden");
         axios.post('http://127.0.0.1:8000/api/loginPage',{
             'email': email_username,
             'username': email_username,
@@ -21,13 +27,19 @@ function Login(){
         }).then(response => {
             if(response.data.message === "wrong password"){
                 setError_Email("Wrong email or password");
+                setLoginBtn("text-white bg-[#EE5454] hover:bg-[#a23a3a] transition duration-[0.5s] w-28 rounded-[10px] h-7 mt-2");
+                setLoginAnimation("hidden");
             }
             else if(response.data.message === "wrong email/username address"){
                 setError_Email("Wrong email or password");
+                setLoginBtn("text-white bg-[#EE5454] hover:bg-[#a23a3a] transition duration-[0.5s] w-28 rounded-[10px] h-7 mt-2");
+                setLoginAnimation("hidden");
             }
             else if(response.data.message === "your account is not verified"){
                 setAlertVerified("your account is not verified");
                 setWrongEmail("hidden");
+                setLoginBtn("text-white bg-[#EE5454] hover:bg-[#a23a3a] transition duration-[0.5s] w-28 rounded-[10px] h-7 mt-2");
+                setLoginAnimation("hidden");
             }
             else if(response.data.message === "going to end user page"){
                 navigate('/Choose_Game');
@@ -60,7 +72,9 @@ function Login(){
                             <Link to="/Forgot_Password">
                                 <a href="#" className='ml-32 text-sm underline mt-2 hover:text-blue-600 transition duration-[0.5s]'>Forgot Password?</a>
                             </Link>
-                            <button className='text-white bg-[#EE5454] hover:bg-[#a23a3a] transition duration-[0.5s] w-28 rounded-[10px] h-7 mt-2'>Login</button>
+                            <button className={loginBtn}>Login</button>
+                            <p className={loginAnimation}>Logging in...</p>
+
                             <p className='mt-3 text-sm'>Don't have account? <Link to="/SignUp"><span><a href="#" className='underline hover:text-blue-600 transition duration-[0.5s]'>Sign up here</a></span></Link></p>
                         </div>
                     </form>

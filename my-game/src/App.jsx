@@ -2,14 +2,14 @@ import Login from "./Components/Login/Login";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignUp from "./Components/SignUp/SignUp";
 import Verification from "./Components/Verification/Verification";
-import Choose_Game from "./Components/Choose_Game/Choose_Game";
 import Forgot_Password from "./Components/Forgot_Password/Forgot_Password";
 import Forgot_Verification from "./Components/Forgot_Password/Forgot_Verification";
 import New_Password from "./Components/Forgot_Password/New_Password";
 import Admin_Options from "./Components/Admin/Admin_Options/Admin_Options";
 import Accounts_Admin from "./Components/Admin/Accounts_Admin/Accounts_Admin";
-import Trivia_Admin from "./Components/Admin/Trivia_Admin/Trivia_Admin";
 import Guess_Admin from "./Components/Admin/Guess_Admin/Guess_Admin";
+import Trick_Questions from "./Components/Admin/Trick_Questions/Trick_Questions";
+import Choose_Game from "./Components/EndUser_Page/Choose_Game/Choose_Game";
 
 function App() {
   return(
@@ -53,7 +53,7 @@ function App() {
           <Route path="Admin_Trivia" element={
           <>
             <Admin_Options />
-            <Trivia_Admin />
+            <Trick_Questions />
             
           </>
         }/>

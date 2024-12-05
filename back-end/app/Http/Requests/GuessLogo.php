@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TriviaQuestions extends FormRequest
+class GuessLogo extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,8 @@ class TriviaQuestions extends FormRequest
     public function rules(): array
     {
         return [
-            "questions" => "string|required",
-            "answer" => "string|required",
-            "language" => "string|required",
-            "difficulty" => "string|required"
-
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'answer' => "string|required",
         ];
     }
 }

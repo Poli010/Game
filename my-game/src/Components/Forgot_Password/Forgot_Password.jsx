@@ -14,23 +14,21 @@ function Forgot_Password(){
         e.preventDefault();
            setButton("hidden");
            setSending("block");
+            axios.post(`http://127.0.0.1:8000/api/forgot_password/${email}`).then(response => {
+                if(response.data.message === "verification code sent successfully"){
+                    const interval = setInterval(() => {
+                        navigate(`/Forgot_Verification?email=${email}`);
+                        clearInterval(interval);
+                    }, 3000);
+                    
+                }
+                else if(response.data.message === "the email you entered is not registered to our system"){
+                    setErrorEmail("the email you entered is not registered to our system");
+                    setButton("mt-5 text-white bg-[#EE5454] hover:bg-[#a23a3a] transition duration-[0.5s] w-28 rounded-[10px]");
+                    setSending("hidden");
         
-        
-        axios.post(`http://127.0.0.1:8000/api/forgot_password/${email}`).then(response => {
-            if(response.data.message === "verification code sent successfully"){
-                const interval = setInterval(() => {
-                    navigate(`/Forgot_Verification?email=${email}`);
-                    clearInterval(interval);
-                }, 3000);
-                
-            }
-            else if(response.data.message === "the email you entered is not registered to our system"){
-                setErrorEmail("the email you entered is not registered to our system");
-                setButton("mt-5 text-white bg-[#EE5454] hover:bg-[#a23a3a] transition duration-[0.5s] w-28 rounded-[10px]");
-                setSending("hidden");
-      
-            }
-        })
+                }
+            })
     }
 
     return(

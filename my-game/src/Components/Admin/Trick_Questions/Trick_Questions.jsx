@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
-import './Trivia_Admin.css';
+import './Trick_Questions.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
 
-function Trivia_Admin(){
+function Trick_Questions(){
     const [questions, setQuestions] = useState([]);
     const add_questions = useRef();
     const [answer, setAnswer] = useState("");
@@ -11,7 +13,6 @@ function Trivia_Admin(){
     const [errorQuestion, setErrorQuestion] = useState("");
     const [question_value, setQuestionValue] = useState("");
     const [questionTaken, setQuestionTaken] = useState("");
-    const [formSubmitted, setFormSubmitted] = useState(false);
     const editQuestion = useRef();
     const [edit_question, setEdit_Question] = useState("");
     const [edit_answer, setEdit_Answer] = useState("");
@@ -19,6 +20,9 @@ function Trivia_Admin(){
     const [id, setId] = useState("");
     const deleteQuestion = useRef();
     const [question_ID, setQuestion_ID] = useState("");
+    const [language, setLanguage] = useState("");
+    const [difficultyFilter, setDifficultyFilter] = useState(""); 
+    const [languageFilter, setLanguageFilter] = useState("");
 
     //FETCH DATA
     useEffect(() => {
@@ -44,7 +48,8 @@ function Trivia_Admin(){
         axios.post('http://127.0.0.1:8000/api/add_questions', {
             'questions': question_value,
             'answer': answer,
-            'difficulty': difficulty
+            'difficulty': difficulty,
+            'language': language
         }).then(response => {
             if(response.data.message === "Question Added Successfully"){
                 window.location.reload();
@@ -55,6 +60,9 @@ function Trivia_Admin(){
         })
             
     }
+  
+      
+      
 
     //EDIT QUESTION POPUP
     const openEditQuestion = (id) => {
@@ -108,12 +116,50 @@ function Trivia_Admin(){
             }
         })
     }
+
+    //FILTER ROW
+    function handleDifficultyDropdownChange(e) {
+        const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
+        if (selectedOptions.includes("")) {
+          setDifficultyFilter([]);
+        } else {
+          setDifficultyFilter(selectedOptions);
+        }
+    }
+
+    function handleLanguageDropDown(e){
+        const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
+        if (selectedOptions.includes("")) {
+            setLanguageFilter([]);
+          } else {
+            setLanguageFilter(selectedOptions);
+          }
+    }
+        
+    let filteredQuestions;
+    if(difficultyFilter.length > 0 && languageFilter.length > 0){
+        filteredQuestions = questions.filter((question) => difficultyFilter.includes(question.difficulty) && languageFilter.includes(question.language));
+    }
+    else if(difficultyFilter.length > 0) {
+        filteredQuestions = questions.filter((question) => difficultyFilter.includes(question.difficulty));
+    } 
+    else if(languageFilter.length > 0){
+        filteredQuestions = questions.filter((question) => languageFilter.includes(question.language));
+    }
+    else {
+        filteredQuestions = questions;
+    }
+
+
+    
+      
+
     return(
         <>
             <div className="container fixed left-44 lg:left-60  w-screen h-screen ">
-            <h1 className='fixed font-bold text-2xl left-[55%] translate-x-[-55%] mt-3'>Trivia Questions and Answer</h1>
+            <h1 className='fixed font-bold text-2xl left-[55%] translate-x-[-55%] mt-3'>Trick Questions and Answer</h1>
                 <div>
-                    <button className="fixed right-3 lg:right-16 top-12 lg:top-8 bg-[#A52A2A] w-36 h-7 lg:h-8  text-sm  rounded-[10px] text-white hover:bg-[#351010] transition duration-500" onClick={addQuestions}>Add Trivia Questions</button>
+                    <button className="fixed right-3 lg:right-16 top-12 lg:top-8 bg-[#A52A2A] w-36 h-7 lg:h-8  text-sm  rounded-[10px] text-white hover:bg-[#351010] transition duration-500" onClick={addQuestions}>Add Trick Questions</button>
                 </div>
                 <div className="table top-20 fixed ml-2 left-0 lg:left-[232px] border-2 border-black w-[97%] lg:w-[77%] lg:ml-10">
                     <table className="w-full">
@@ -123,18 +169,20 @@ function Trivia_Admin(){
                                 <td className="w-[200px] lg:w-[300px] font-bold">Questions</td>
                                 <td className="w-[100px] lg:w-[300px] font-bold">Answer</td>
                                 <td className="w-[100px] lg:w-[100px] font-bold">Diffuclty</td>
+                                <td className="w-[100px] lg:w-[100px] font-bold">Language</td>
                                 <td className="w-[150px] lg:w-[200px] font-bold">Question_ID</td>
                                 <td className="w-[150px] lg:w-[200px] font-bold">Action</td>
                             </div>
                         </th>
                         <tr className=' overflow-scroll'>
                             <div className="row h-[500px] overflow-y-scroll">
-                                {questions.map((question, index) => (
-                                    <div className="row flex justify-evenly  text-center h-10 items-center border-b-[1px]  border-black">
+                                {filteredQuestions.map((question, index) => (
+                                    <div className="row flex justify-evenly  text-center h-20 items-center border-b-[1px]  border-black">
                                         <td className="w-[50px] lg:w-[50px]">{index + 1}</td>
                                         <td className="w-[200px] lg:w-[300px]">{question.questions}</td>
                                         <td className="w-[100px] lg:w-[300px]">{question.answer}</td>
                                         <td className="w-[100px] lg:w-[100px]">{question.difficulty}</td>
+                                        <td className="w-[100px] lg:w-[100px]">{question.language}</td>
                                         <td className="w-[150px] lg:w-[200px]">{question.question_id}</td>
                                         <td className="w-[150px] lg:w-[190px]">
                                             <button className="bg-[#2319E1] text-white w-[60px] lg:w-[90px] mr-1 rounded-[5px] hover:bg-[#221f61] transition duration-500" onClick={() => openEditQuestion(question.id)}>Edit</button>
@@ -146,13 +194,38 @@ function Trivia_Admin(){
                         </tr>
                     </table>
                 </div>
+
+                <div className="filter fixed top-[90%]">
+                    <div className="content flex">
+                    <h1 className='ml-5'>Filter<FontAwesomeIcon icon={faFilter} />:</h1>
+
+                        <label htmlFor="" className='ml-3'>
+                            Difficulty: 
+                            <select name="" id="" className='border-[1px] border-black cursor-pointer w-40 rounded-[5px] ml-1' value={difficultyFilter} onChange={(e) => handleDifficultyDropdownChange(e)}>
+                                <option value=""></option>
+                                <option value="Easy">Easy</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Hard">Hard</option>
+                                <option value="Extreme">Extreme</option>
+                            </select>
+                        </label>
+                        <label htmlFor="" className='ml-3'>
+                            Language:
+                            <select name="" id="" className='border-[1px] border-black cursor-pointer w-40 rounded-[5px] ml-1' value={languageFilter} onChange={(e) => handleLanguageDropDown(e)}>
+                                <option value=""></option>
+                                <option value="English">English</option>
+                                <option value="Tagalog">Tagalog</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
             </div>
             {/* ADD QUESTIONS */}
             
             <div className="add_questions" ref={add_questions}>
                 <h1 className='font-bold text-xl text-center mt-2'>Add Questions</h1>
                 <form className='flex flex-col items-center' onSubmit={createQuestions}>
-                    <div className="email flex flex-col mt-5">
+                    <div className="email flex flex-col mt-2">
                         <label htmlFor="">Question:</label>
                         <textarea className='border-black border-[1px] w-56 rounded-[5px]' value={question_value} onChange={(e) => setQuestionValue(e.target.value)} required/>
                     </div>
@@ -169,6 +242,14 @@ function Trivia_Admin(){
                             <option value="Medium">Medium</option>
                             <option value="Hard">Hard</option>
                             <option value="Extreme">Extreme</option>
+                        </select>
+                    </div>
+                    <div className="diffuclty flex flex-col mt-3">
+                        <label htmlFor="#">Language:</label>
+                        <select name="" id="" className='border-black border-[1px] w-56 rounded-[5px] cursor-pointer' value={language} onChange={(e) => setLanguage(e.target.value)} required>
+                            <option value=""></option>
+                            <option value="English">English</option>
+                            <option value="Tagalog">Tagalog</option>
                         </select>
                     </div>
                     <div className="btn flex mt-5 w-52 justify-between">
@@ -224,4 +305,4 @@ function Trivia_Admin(){
     );
 }
 
-export default Trivia_Admin
+export default Trick_Questions

@@ -35,3 +35,9 @@ Route::get("fetch_question", [AdminController::class, 'trivia_questions']);
 Route::post("add_questions", [AdminController::class, 'addQuestions']);
 Route::put('updateQuestion/{id}', [AdminController::class, 'editQuestion']);
 Route::delete('deleteQuestion/{question_id}', [AdminController::class, 'deleteQuestion']);
+
+//GUESS THE LOGO API
+Route::get('fetch_guessLogo', [AdminController::class, 'fetchGuess']);
+Route::post('addGuessQuestion', [AdminController::class, 'addGuessLogo']);
+Route::post('editGuessQuestion/{question_id}', [AdminController::class, 'editGuess']); //USE POST, NOT PUT. BECAUSE YOUR CREATING NEW IMAGE AND NOT UPDATING OKAY!, YOU ONLY UPDATE THE ANSWER WHICH IS STRING, BUT IMAGE IS NOT EDITABLE SO YOU NEED TO CREATE NEW THAT'S WHY YOU NEED TO USE POST!
+Route::delete('deleteGuessQuestion/{question_id}', [AdminController::class, 'deleteGuess']);

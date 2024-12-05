@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Accounts;
-use  App\Models\Trivia_Questions;
+use App\Models\Trivia_Questions;
+use App\Models\Guess_Logo;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\EditAdminAccount;
 use App\Http\Requests\TriviaQuestions;
+use App\Http\Requests\GuessLogo;
 
 class AdminController extends Controller
 {   
@@ -89,6 +91,7 @@ class AdminController extends Controller
         $question = $trivia->questions;
         $answer = $trivia->answer;
         $difficulty = $trivia->difficulty;
+        $language = $trivia->language;
         $check = Trivia_Questions::where('questions', $question)->first();
         if($check){
             return response()->json(['message' => "Question is already inserted"], 200);
@@ -98,6 +101,7 @@ class AdminController extends Controller
                 "questions" => $question,
                 "answer" => $answer,
                 "difficulty" => $difficulty,
+                "language" => $language,
                 "question_id" => "QuestionID-" .implode('', array_map(fn() => rand(1, 9), range(1, 6)))
             ]);
             return response()->json(['message' => "Question Added Successfully"], 200);
@@ -130,7 +134,7 @@ class AdminController extends Controller
         
     }
 
-    //DELTE QUESTIONS
+    //DELETE QUESTIONS
     public function deleteQuestion($question_id){
         $delete = Trivia_Questions::where('question_id', $question_id)->first();
         if($delete){
@@ -139,6 +143,86 @@ class AdminController extends Controller
         }
         else{
             return response()->json(['message' => 'user not found!'], 200);
+        }
+    }
+
+    //FETCH GUESS THE LOGO
+    public function fetchGuess(){
+        $fetch = Guess_Logo::all()->map(function ($item){
+            $item->image = asset($item->image);
+            return $item;
+        });
+        return response()->json(['result' => $fetch], 200);
+    }
+
+    
+    //FUNCTION FOR GUESS THE LOGO ADDING QUESTIONS
+    public function addGuessLogo(GuessLogo $guess){
+            // Check if the image is uploaded
+        if ($guess->hasFile('image')) {
+                $image = $guess->file('image');
+                // Get the original file name and extension
+                $originalName = $image->getClientOriginalName();
+                // Move the file to the 'Picture' folder
+                $image->move(public_path('Pictures'), $originalName);
+
+                // Save the image path in the database
+                $imagePath = 'Pictures/' . $originalName;
+
+                $answer = $guess->answer;
+                $question_id = 'QuestionID-' . implode('', array_map(fn() => rand(1, 9), range(1, 6)));
+
+                // Now save the Guess_Logo with only the image path (not the Image object)
+                $add = Guess_Logo::create([
+                    'image' => $imagePath, // Save only the image path
+                    'answer' => $answer,
+                    'question_id' => $question_id,
+                ]);
+
+                return response()->json(['message' => "insert success"], 200);
+        }
+            return response()->json(['error' => 'Image upload failed'], 400);
+    }
+
+    //FUNCTION FOR EDIT GUESS QUESTION
+    public function editGuess(GuessLogo $guess, $question_id){
+        $edit = Guess_Logo::where('question_id', $question_id)->first();
+        $answer = $guess->answer;
+        if($edit){
+            if($guess->hasFile('image')){
+                $image = $guess->file('image');
+                $originalName = $image->getClientOriginalName();
+                $image->move(public_path('Pictures'), $originalName);
+                $imagePath = 'Pictures/' . $originalName;
+                $oldImage = $edit->image;
+                if(file_exists($oldImage)){
+                    unlink($oldImage);
+                }
+                $edit->image = $imagePath;
+                $edit->answer = $answer;
+                $edit->save();
+                return response()->json(['message' => "edit success"], 200);
+            }
+        }
+        else{
+            return response()->json(['message' => "user not found!"], 404);
+        }   
+    }
+            
+    
+    //FUNCTION FOR DELETE GUESS QUESTION
+    public function deleteGuess($question_id){
+        $delete = Guess_Logo::where('question_id', $question_id)->first();
+        if($delete){
+            $imagePath = public_path($delete->image);
+            if(file_exists($imagePath)){
+                unlink($imagePath);
+            }
+            $delete -> delete();
+            return response()->json(['message' => 'delete success'], 200);
+        }
+        else{
+            return response()->json(['message' => 'question not found'], 200);
         }
     }
 }
